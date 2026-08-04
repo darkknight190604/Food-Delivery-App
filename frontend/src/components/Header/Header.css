@@ -10,10 +10,10 @@
     position: absolute;
     display: flex;
     flex-direction: column;
-    align-items: start; 
+    align-items: start;
     gap: 1.5vw;
     max-width: 50%;
-    bottom: 10%; 
+    bottom: 10%;
     left: 6vw;
     animation: fadeIn 3s ease-in-out;
 }
@@ -26,7 +26,7 @@
 
 .header-contents p {
     color: white;
-    font-size: 1vw; 
+    font-size: 1vw;
 }
 
 .header-contents button {
@@ -41,6 +41,35 @@
 }
 
 @keyframes fadeIn {
-    0% { opacity: 0; }
-    100% { opacity: 1; }
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+@media (max-width: 1050px) {
+
+    .header-contents {
+        max-width: 45%;
+    }
+
+}
+
+@media (max-width: 750px) {
+
+    .header-contents {
+        max-width: 65%;
+    }
+
+    .header-contents p {
+        display: none;
+    }
+
+    .header-contents button {
+        padding: 2vw 4vw;
+    }
+
 }

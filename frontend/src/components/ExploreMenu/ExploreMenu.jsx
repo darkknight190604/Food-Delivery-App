@@ -34,4 +34,3 @@ const ExploreMenu = ({ category, setCategory }) => {
 
 export default ExploreMenu
 
-// HELLO, I AM AN AI LANGUAGE MODEL. HOW CAN I HELP YOU TODAY?
