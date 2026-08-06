@@ -5,6 +5,17 @@ import { assets } from '../../assets/assets';
 const LoginPopup = ({ setShowLogin }) => {
 
     const [currentState, setCurrentState] = useState("Login");
+    const [data,setData] = useState({
+        name:"",
+        email:"",
+        password:""
+    })
+
+    const onChangeHandler = () => {
+        const name = event.target.name;
+        const value = event.target.value;
+        setData(data =>({...data,[name]:value}))          
+} 
 
     return (
         <div className="login-popup">
@@ -21,14 +32,15 @@ const LoginPopup = ({ setShowLogin }) => {
 
                 <div className="login-popup-inputs">
                     {currentState === "Sign Up" && (
-                        <input
+                        <input name='name' onChange={onChangeHandler}
+                            value ={data.name}
                             type="text"
                             placeholder="Your name"
                             required
                         />
                     )}
 
-                    <input
+                    <input name='email' onChange={}
                         type="email"
                         placeholder="Your email"
                         required
