@@ -40,7 +40,8 @@ const LoginPopup = ({ setShowLogin }) => {
                         />
                     )}
 
-                    <input name='email' onChange={}
+                    <input name='email' onChange={onChangeHandler}
+                        
                         type="email"
                         placeholder="Your email"
                         required
