@@ -41,13 +41,14 @@ const LoginPopup = ({ setShowLogin }) => {
                     )}
 
                     <input name='email' onChange={onChangeHandler}
-                        
+                        value={data.email}
                         type="email"
                         placeholder="Your email"
                         required
                     />
 
-                    <input
+                    <input name='password' onChange={onChangeHandler}
+                        value = {data.password}
                         type="password"
                         placeholder="Password"
                         required
