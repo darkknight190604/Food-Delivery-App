@@ -30,6 +30,12 @@ const NavBar = ({ setShowLogin }) => {
         }
     };
 
+    const logout = () => {
+        localStorage.removeItem("token");
+        setToken("");
+        navigate("/");
+    };
+
     return (
         <div className="navbar">
             <Link to="/" onClick={() => setMenu("home")}>
@@ -84,13 +90,16 @@ const NavBar = ({ setShowLogin }) => {
                 ) : (
                     <div className="navbar-profile">
                         <img src={assets.profile_icon} alt="profile_icon" />
+
                         <ul className="navbar-profile-dropdown">
                             <li>
                                 <img src={assets.bag_icon} alt="" />
                                 <p>Orders</p>
                             </li>
+
                             <hr />
-                            <li>
+
+                            <li onClick={logout}>
                                 <img src={assets.logout_icon} alt="" />
                                 <p>Logout</p>
                             </li>
