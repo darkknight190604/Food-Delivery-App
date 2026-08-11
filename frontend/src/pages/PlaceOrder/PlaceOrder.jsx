@@ -1,12 +1,13 @@
 import React, { useContext, useState } from 'react'
+import axios from "axios"
 import './PlaceOrder.css'
 import { StoreContext } from '../../context/StoreContext'
 
 const PlaceOrder = () => {
 
-const { getTotalCartAmount,token,food_list,cartIems,url } = useContext(StoreContext);
+const { getTotalCartAmount, token, food_list, cartItems, url } = useContext(StoreContext);
 
-const [data,setData] = useState({
+const [data, setData] = useState({
 firstName:"",
 lastName:"",
 email:"",
@@ -18,22 +19,73 @@ country:"",
 phone:""
 })
 
+const [loading, setLoading] = useState(false);
+
 const onChangeHandler = (event) => {
 const name = event.target.name;
 const value = event.target.value;
-setData(data=>({...data,[name]:value}))
+setData(data => ({...data,[name]:value}))
+}
+
+const placeOrder = async (event) => {
+    event.preventDefault();
+
+    setLoading(true);
+
+    let orderItems = [];
+
+    food_list.map((item) => {
+        if (cartItems[item._id] > 0) {
+
+            let itemInfo = item;
+            itemInfo["quantity"] = cartItems[item._id];
+            orderItems.push(itemInfo);
+
+        }
+    })
+
+    let orderData = {
+        address: data,
+        items: orderItems,
+        amount: getTotalCartAmount() + 2,
+    }
+
+    try {
+
+        let response = await axios.post(
+            url + "/api/order/place",
+            orderData,
+            { headers: { token } }
+        );
+
+        if (response.data.success) {
+            const { session_url } = response.data;
+            window.location.replace(session_url);
+        }
+        else {
+            setLoading(false);
+            alert("ERROR");
+        }
+
+    } catch (error) {
+        console.log(error);
+        setLoading(false);
+        alert("Something went wrong");
+    }
 }
 
 return (
 
-<form>
+<form onSubmit={placeOrder} className="place-order">
 
   <div className="place-order-left">
 
     <p className="title">Delivery Information</p>
 
     <div className="multi-fields">
+
       <input
+        required
         name="firstName"
         onChange={onChangeHandler}
         value={data.firstName}
@@ -42,15 +94,18 @@ return (
       />
 
       <input
+        required
         name="lastName"
         onChange={onChangeHandler}
         value={data.lastName}
         type="text"
         placeholder='Last Name'
       />
+
     </div>
 
     <input
+      required
       name="email"
       onChange={onChangeHandler}
       value={data.email}
@@ -59,6 +114,7 @@ return (
     />
 
     <input
+      required
       name="street"
       onChange={onChangeHandler}
       value={data.street}
@@ -67,7 +123,9 @@ return (
     />
 
     <div className="multi-fields">
+
       <input
+        required
         name="city"
         onChange={onChangeHandler}
         value={data.city}
@@ -76,16 +134,20 @@ return (
       />
 
       <input
+        required
         name="state"
         onChange={onChangeHandler}
         value={data.state}
         type="text"
         placeholder='State'
       />
+
     </div>
 
     <div className="multi-fields">
+
       <input
+        required
         name="zipcode"
         onChange={onChangeHandler}
         value={data.zipcode}
@@ -94,15 +156,18 @@ return (
       />
 
       <input
+        required
         name="country"
         onChange={onChangeHandler}
         value={data.country}
         type="text"
         placeholder='Country'
       />
+
     </div>
 
     <input
+      required
       name="phone"
       onChange={onChangeHandler}
       value={data.phone}
@@ -119,6 +184,7 @@ return (
       <h2>Cart Total</h2>
 
       <div>
+
         <div className="cart-total-details">
           <p>SubTotal</p>
           <p>${getTotalCartAmount()}</p>
@@ -137,9 +203,12 @@ return (
           <b>Total</b>
           <b>${getTotalCartAmount() === 0 ? 0 : getTotalCartAmount() + 2}</b>
         </div>
+
       </div>
 
-      <button>PROCEED TO PAYMENT</button>
+      <button type='submit' disabled={loading}>
+        {loading ? "Processing..." : "PROCEED TO PAYMENT"}
+      </button>
 
     </div>
 
@@ -149,4 +218,4 @@ return (
 )
 }
 
-export default PlaceOrder     
+export default PlaceOrder
