@@ -8,7 +8,7 @@ const stripe = new Stripe(process.env.STRIPE_SCRET_KEY);
 //PLACEING USER ORDER FROM FRONTEND
 const placeOrder = async (req, res) => {
 
-    const frontend_url = "http://localhost:5173";
+    const frontend_url = "http://localhost:5174";
 
     try {
         const newOrder = new orderModel({
@@ -136,4 +136,31 @@ const userOrders = async (req, res) => {
 }
 
 
-export { placeOrder, verifyOrder, userOrders };
+// LISTING ORDERS FOR ADMIN PANEL
+const lisOrders = async (req,res) =>{
+    try {
+        const orders = await orderModel.find({});
+        res.json({success:true,data:orders})
+        
+    } catch (error) {
+        console.log(error);
+        res.json({success:false,message:"ERROR"})
+        
+    }
+}
+
+// API FOR UPDATING ORDER STATUS
+const updateStatus = async (req,res) => {
+    try {
+        await orderModel.findByIdAndUpdate(req.body.orderId,{status:req.body.status});
+        res.json({success:true,message:"STATUS UPDATED"})
+
+    } catch (error) {
+        console.log(error);
+        res.json({success:false,message:"ERROR"})
+        
+    }
+}
+
+
+export { placeOrder, verifyOrder, userOrders, lisOrders,updateStatus };
